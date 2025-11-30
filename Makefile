@@ -2,23 +2,15 @@ STEAM_USERNAME := ""
 STEAM_BETA := ""
 
 DOCKER_COMMAND := "docker"
-IMAGE_NAME := "fragsoc/carrier-command"
-DOCKER_ARGS := ""
+IMAGE_NAME := "bredlab/cc2-server:stable"
 
 .PHONY: build clean
 
-build: game_files
-	${DOCKER_COMMAND} build $(DOCKER_ARGS) -t $(IMAGE_NAME) .
+build:
+	${DOCKER_COMMAND} build -t $(IMAGE_NAME) .
+	${DOCKER_COMMAND} volume create carriercommand || true
+	${DOCKER_COMMAND} run -e STEAM_USERNAME=$(STEAM_USERNAME) -u carriercommand -v carriercommand:/carriercommand -w / --rm --entrypoint="" -it $(IMAGE_NAME) bash /install-cc2.sh
 
-game_files:
-	steamcmd \
-		+@sSteamCmdForcePlatformType windows \
-		+force_install_dir "$(shell pwd -P)/game_files_temp" \
-		+login $(STEAM_USERNAME) \
-		+app_update 1489630 $(STEAM_BETA) validate \
-		+app_update 1007 validate \
-		+quit
-	mv ./game_files_temp ./game_files
 
 clean:
 	rm -rfv ./game_files ./game_files_temp

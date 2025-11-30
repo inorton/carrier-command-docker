@@ -1,8 +1,8 @@
 FROM bredlab/wine-xvfb:stable
 # Maintainer: Laura Demkowicz-Duffy <dev@demkowiczduffy.co.uk>
 
-ARG UID=999
-ARG GID=999
+ARG UID=1999
+ARG GID=1999
 
 ENV CONFIG_LOC="/config"
 ENV LOG_LOC="/logs"
@@ -24,15 +24,15 @@ RUN mkdir -p $INSTALL_LOC && \
 # Install the carriercommand server
 ARG APPID=1489630
 ARG STEAM_BETA=""
-COPY ./game_files $INSTALL_LOC
 COPY ./docker-entrypoint.sh /entrypoint.sh
+COPY ./install-cc2.sh /
 COPY ./healthcheck.sh /healthcheck.sh
 RUN chown -R carriercommand:carriercommand $INSTALL_LOC && \
     chmod +x /entrypoint.sh /healthcheck.sh && \
     ln -s $CONFIG_LOC/server_config.xml $INSTALL_LOC/server_config.xml
 
 # I/O
-VOLUME $CONFIG_LOC $LOG_LOC
+VOLUME $CONFIG_LOC $LOG_LOC $INSTALL_LOC
 # We can't do arithmetic here so the ports are hardcoded :(
 EXPOSE 25565/udp 25566/udp 25567/udp
 
