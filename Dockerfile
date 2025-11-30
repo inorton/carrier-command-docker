@@ -14,7 +14,7 @@ USER root
 
 RUN apt update && \
     # Install libsdl, used by steamcmd
-    apt install -y --no-install-recommends libsdl2-2.0-0 winbind
+    apt install -y --no-install-recommends libsdl2-2.0-0 winbind procps
 
 # Setup directory structure and user permissions
 RUN mkdir -p $INSTALL_LOC && \
