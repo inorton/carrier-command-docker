@@ -1,4 +1,4 @@
-FROM fragsoc/steamcmd-wine-xvfb
+FROM bredlab/wine-xvfb:stable
 # Maintainer: Laura Demkowicz-Duffy <dev@demkowiczduffy.co.uk>
 
 ARG UID=999
